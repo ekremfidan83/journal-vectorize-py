@@ -14,13 +14,14 @@ class Article(BaseModel):
 class VectorResponse(BaseModel):
     vector: list[float]
 
+class TextRequest(BaseModel):
+    text: str
+
 @app.post("/vectorize")
-async def vectorize_text(article: Article):
-    # Başlık ve özeti birleştir
-    text = f"{article.title} {article.abstract}"
-    # Vektöre dönüştür
+async def vectorize(request: TextRequest):
+    text = request.text
     vector = model.encode(text)
-    return VectorResponse(vector=vector.tolist())
+    return vector.tolist()
 
 @app.get("/test")
 async def test_endpoint():
